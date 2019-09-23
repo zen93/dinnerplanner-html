@@ -11,6 +11,18 @@ class DinnerModel {
 
   }
 
+  handleHTTPError(response) {
+    if(response.ok)
+       return response;
+    if(response.status == 404)
+      return response;
+    throw Error(response.statusText);
+  }
+
+  removeLoadingIcon() {
+    document.getElementById("loader").style.display = 'none';
+  }
+
   setNumberOfGuests(num) {
     //TODO Lab 0
     if(num <= 10 && num >= 0) this.guests = num;
@@ -50,24 +62,16 @@ class DinnerModel {
 
   //Adds the passed dish to the menu. If the dish of that type already exists on the menu
   //it is removed from the menu and the new one added.
-  addDishToMenu(id) {
+  addDishToMenu(data) {
     //TODO Lab 0 
-    this.dishes.map((dish) => {
-      let dishType = undefined; 
-      if(dish.id == id) {
-        dishType = dish.type;
-        this.menu.map((d) => {
-          if(d.type == dishType) this.removeDishFromMenu(d.id);
-        });
-        this.menu.push(dish);
-      }
-    });
+    this.menu.push(data);
   }
 
   //Removes dish from menu
   removeDishFromMenu(id) {
     //TODO Lab 0
     this.menu = this.menu.filter(dish => dish.id != id);
+    this.removeLoadingIcon();
   }
 
 
@@ -75,34 +79,31 @@ class DinnerModel {
   //query argument, text, if passed only returns dishes that contain the query in name or one of the ingredients.
   //if you don't pass any query, all the dishes will be returned
   getAllDishes(type, query) {
-    if(!type && !query) return this.dishes;
+    if(!type && !query) {
+      return fetch(host + '/recipes/search', {headers: { 'X-Mashape-Key': key }})
+      .then(this.handleHTTPError)
+      .then(response => response.json())
+      .then(data => data.results)
+      .catch(console.error);
+
+    } 
     else {
-      return this.dishes.filter(function (dish) {
-        let found = true;
-        if (query) {
-          found = false;
-          dish.ingredients.forEach(function (ingredient) {
-            if (ingredient.name.indexOf(query) !== -1) {
-              found = true;
-            }
-          });
-          if (dish.name.indexOf(query) !== -1) {
-            found = true;
-          }
-        }
-        if(!type && query) return found;
-        return dish.type === type && found;
-      });
+      if(type && query) {
+        return fetch(host + '/recipes/search?type=' + type + '&query=' + query, {headers: { 'X-Mashape-Key': key }})
+        .then(this.handleHTTPError)
+        .then(response => response.json())
+        .then(data => data.results)
+        .catch(console.error);
+      }
     }    
   }
 
   //Returns a dish of specific ID
   getDish(id) {
-    let arr = this.dishes.filter((dish) => {
-      return dish.id == id;
-    });
-    if(arr.length > 0) return arr[0];
-    else return undefined;
+    return fetch(host + "/recipes/" + id + "/information", {headers: { 'X-Mashape-Key': key }})
+    .then(this.handleHTTPError)
+    .then(response => response.json())
+    .catch(console.error);
   }
 }
 
@@ -373,4 +374,3 @@ function deepFreeze(o) {
 }
 
 deepFreeze(dishesConst);
-
