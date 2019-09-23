@@ -26,7 +26,7 @@ class DinnerModel {
     //TODO Lab 0
     dishes = [];
     for(var i = 0; i < this.menu.length; i++) {
-      if(this.menu[i].types == type) {
+      if(this.menu[i].type == type) {
         dishes.push(this.dishes[i]);
       }
     }
