@@ -24,13 +24,7 @@ class DinnerModel {
   //Returns the dish that is on the menu for selected type 
   getSelectedDish(type) {
     //TODO Lab 0
-    dishes = [];
-    for(var i = 0; i < this.menu.length; i++) {
-      if(this.menu[i].types == type) {
-        dishes.push(this.dishes[i]);
-      }
-    }
-    return dishes;
+    return this.menu.filter((dish) => dish.type == type);
   }
 
   //Returns all the dishes on the menu.
@@ -42,21 +36,14 @@ class DinnerModel {
   //Returns all ingredients for all the dishes on the menu.
   getAllIngredients() {
     //TODO Lab 0
-    ingredients = [];
-    for(var i = 0;i < this.menu.length;i++) {
-      ingredients.push(this.menu[i].ingredients);
-    }
+    return this.menu.map((dish) => dish.ingredients);
   }
 
   //Returns the total price of the menu (all the ingredients multiplied by number of guests).
   getTotalMenuPrice() {
     //TODO Lab 0
-    var total = 0;
-    for(var i = 0; i < this.menu.length; i++){
-      for(var j = 0; j < this.menu[i].ingredients.length; j++) {
-        total += this.menu[i].ingredients[j].price;
-      }
-    }
+    var total;
+    total = this.menu.map((dish) => dish.ingredients).flat().map(ingredient => ingredient.price).reduce((a, b) => a + b);
     total *= this.guests;
     return total;
   }
@@ -65,32 +52,22 @@ class DinnerModel {
   //it is removed from the menu and the new one added.
   addDishToMenu(id) {
     //TODO Lab 0 
-    var dishType = "";
-    var dish = null;
-    for(var i = 0; i < this.dishes.length; i++) {
-      if(this.dishes[i].id == id) {
-        dishType = this.dishes[i].type;
-        dish = this.dishes[i];
+    this.dishes.map((dish) => {
+      let dishType = undefined; 
+      if(dish.id == id) {
+        dishType = dish.type;
+        this.menu.map((d) => {
+          if(d.type == dishType) this.removeDishFromMenu(d.id);
+        });
+        this.menu.push(dish);
       }
-    }
-
-    for(i = 0; i < this.menu.length; i++) {
-      if(this.menu[i].type == dishType) 
-        this.removeDishFromMenu(this.menu[i].id);
-    }
-    this.menu.push(dish);
-
+    });
   }
 
   //Removes dish from menu
   removeDishFromMenu(id) {
     //TODO Lab 0
-    for(var i = 0; i < this.menu.length; i++) {
-      if(this.menu[i].id == id) {
-        this.menu.splice(i, 1);
-        break;
-      }
-    }
+    this.menu = this.menu.filter(dish => dish.id != id);
   }
 
 
@@ -121,12 +98,11 @@ class DinnerModel {
 
   //Returns a dish of specific ID
   getDish(id) {
-    for (let dsh of this.dishes) {
-      if (dsh.id === id) {
-        return dsh;
-      }
-    }
-    return undefined;
+    let arr = this.dishes.filter((dish) => {
+      return dish.id == id;
+    });
+    if(arr.length > 0) return arr[0];
+    else return undefined;
   }
 }
 
