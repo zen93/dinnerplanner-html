@@ -21,7 +21,9 @@ class OverviewView {
           <div class="col-12">
             <hr>
           </div>
-          <div id="dishDetails"></div>
+          <div class="col-9">
+            <div class="row" id="dishDetails"></div>
+          </div>
           <div class="col-12 col-sm-3">
             <p id="value-total-price"></p>
           </div>
@@ -52,16 +54,27 @@ class OverviewView {
       //   list.appendChild(document.createElement('UL')).innerHTML = food;
       // }
       let dishDetails = document.getElementById('dishDetails');
-      this.model.getFullMenu().forEach(dish => {
+      let menu = this.model.getFullMenu();
+      for(let i = 0;i < menu.length; i++) {
         let content = `
           <div class="col-12 col-sm-3">
-            <img src="${dish.image}" >
-            <p>${dish.title}</p>
-            <p>${dish.pricePerServing} SEK</p>
+            <img class="img-fluid" src="${menu[i].image}" >
+            <p>${menu[i].title}</p>
+            <p>${menu[i].pricePerServing} SEK</p>
           </div>
         `;
         dishDetails.innerHTML += content;
-      });
+      }
+      // .forEach(dish => {
+      //   let content = `
+      //     <div class="col-12 col-sm-3">
+      //       <img class="img-fluid" src="${dish.image}" >
+      //       <p>${dish.title}</p>
+      //       <p>${dish.pricePerServing} SEK</p>
+      //     </div>
+      //   `;
+      //   dishDetails.innerHTML += content;
+      // });
       let totalPrice = document.getElementById('value-total-price');
       totalPrice.innerHTML = this.model.getTotalMenuPrice();
       this.afterRender();

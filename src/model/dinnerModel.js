@@ -9,7 +9,7 @@ class DinnerModel {
     // and selected dishes for the dinner menu
     this.guests = 0;
     this.menu = [];
-
+    this.currentDish = 0;
   }
   
   handleHTTPError(response) {
@@ -32,7 +32,12 @@ class DinnerModel {
     //TODO Lab 0
     return this.guests;
   }
-
+  setCurrentDish(id) {
+    this.currentDish = id;
+  }
+  getCurrentDish() {
+    return this.currentDish;
+  }
   //Returns the dish that is on the menu for selected type 
   getSelectedDish(type) {
     //TODO Lab 0
@@ -42,7 +47,6 @@ class DinnerModel {
   //Returns all the dishes on the menu.
   getFullMenu() {
     //TODO Lab 0
-    console.log(this.menu.length);
     return this.menu;
   }
 
@@ -95,7 +99,14 @@ class DinnerModel {
       return fetch(host + '/recipes/search', {headers: { 'X-Mashape-Key': key }})
       .then(this.handleHTTPError)
       .then(response => response.json())
-      .then(data => data.results)
+      .then(data => {
+        let baseUri = data.baseUri;
+        data = data.results;
+        data.forEach((dish) => {
+          dish.image = baseUri + dish.imageUrls[0];
+        });
+        return data;
+      })
       .catch(console.error);
 
     } 

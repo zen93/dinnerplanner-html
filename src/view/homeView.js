@@ -17,7 +17,7 @@ class HomeView {
           arcu. Maecenas a efficitur leo.
         </p>
         <div class="spacing-medium"></div>
-        <a id="startBtn" class="btn btn-lg btn-primary-color">
+        <a id="startBtn" class="btn btn-lg btn-primary">
           Create new dinner
         </a>
       </div>
