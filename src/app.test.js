@@ -23,53 +23,42 @@ describe("DinnerPlanner App", () => {
   });
 
   describe("Search view", () => {
-    beforeEach(() => {
-      model.addDishToMenu(559251);
-      searchView.render();
+    beforeEach(async () => {
+      await model.addDishToMenu(559251);
+      await searchView.render();
     });
 
     it("has a sidebar", () => {
-      setTimeout(()=> {
         const sidebar = document.getElementById("sideBarView");
         expect(sidebar).to.not.be.a("null");
-      }, 10000);
     });
 
     it("has a dish search container", () => {
-      setTimeout(()=> {
         const dishSearch = document.getElementById("dishSearchView");
         expect(dishSearch).to.not.be.a("null");
-      }, 10000);
     });
 
     it("displays a loading message", () => {
-      setTimeout(()=> {
         const loader = document.getElementById("loader");
         expect(loader).to.not.be.a("null");
           
-      }, 10000);
     });
 
     it("displays dishes", () => {
-      setTimeout(()=> {
         const dishes = document.getElementById("dishItems");
         expect(dishes).to.not.be.a("null");
-      }, 10000);
     });
 
     it("Has a number of guests value", () => {
-      setTimeout(()=> {
         const valueHolders = document.getElementsByClassName("value-num-guests");
         expect(valueHolders.length).to.be.above(0);
         for (let v of valueHolders) {
           expect(v).to.not.be.a("null");
-          expect(v.innerHTML).to.equal(""+model.getNumberOfGuests());
+          expect(v.value).to.equal(""+model.getNumberOfGuests());
         }
-      }, 10000);
     });
 
     it("Has data on current dishes", () => {
-      setTimeout(()=> {
 
         const valueHolders = document.getElementsByClassName("value-main-course-name");
         expect(valueHolders.length).to.be.above(0);
@@ -77,27 +66,24 @@ describe("DinnerPlanner App", () => {
           expect(v).to.not.be.a("null");
           expect(v.innerHTML).to.equal("Breakfast Pizza");
         }
-      }, 10000);  
     });
 
     it("Displays the total price correctly", () => {
-      setTimeout(()=> {
         const valueHolders = document.getElementsByClassName("value-total-price");
         expect(valueHolders.length).to.be.above(0);
         for (let v of valueHolders) {
           expect(v).to.not.be.a("null");
           expect(v.innerHTML).to.equal(""+model.getTotalMenuPrice());
         }
-      }, 10000);
       
     });
   });
 
   describe("Confirmation page", () => {
-    beforeEach(() => {
-      model.addDishToMenu(559251);
+    beforeEach(async () => {
+      await model.addDishToMenu(559251);
       model.setNumberOfGuests(1);
-      overviewView.render();
+      await overviewView.render();
     });
 
     it("exists", () => {
@@ -121,25 +107,21 @@ describe("DinnerPlanner App", () => {
     });
 
     it("Has data on current dishes", () => {
-      setTimeout(() => {
         const valueHolders = document.getElementsByClassName("value-main-course-name");
         expect(valueHolders.length).to.be.above(0);
         for (let v of valueHolders) {
           expect(v).to.not.be.a("null");
           expect(v.innerHTML).to.equal("Breakfast Pizza");
         }
-      }, 10000);
     });
 
     it("Displays the total price correctly", () => {
-      setTimeout(() => {
         const valueHolders = document.getElementsByClassName("value-total-price");
         expect(valueHolders.length).to.be.above(0);
         for (let v of valueHolders) {
           expect(v).to.not.be.a("null");
           expect(v.innerHTML).to.equal(""+model.getTotalMenuPrice());
         }
-      }, 10000);
     });
   });
 });

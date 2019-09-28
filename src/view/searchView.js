@@ -6,11 +6,14 @@ class SearchView {
 
   // An example of creating HTML procedurally. Think about the pros and cons of this approach.
   async render() {
-    let dishes = await this.model.getAllDishes();
+    let dishes = this.model.getFullMenu();
   var content =
         `
         <div class="row"> 
           <div class="col-sm-12"><h1>Dinner Planner</h1></div>
+          <div id="loader" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
           <div id="sideBarView" class="col-12 col-sm-4">
           </div>
           <div class="col-12 col-sm-8" id="dishSearchView">
@@ -56,5 +59,6 @@ class SearchView {
   }
 
   afterRender() {
+    document.getElementById('loader').style.display = 'none';
   }
 }

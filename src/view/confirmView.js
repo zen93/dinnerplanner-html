@@ -16,15 +16,10 @@ class ConfirmView {
                     <ul class="navbar-nav" style="display:block;">
                        
                         <li class="nav-item">   
-                            <form class="form-inline">
-                                <div class="form-group form-horizontal">
-                                    <label for="guests" class="mr-2"    >People</label>
-                                    <select class="form-control  mb-2" id="guests">`;
-        for(let i = 1; i <= 10; i++) {
-            if(i == this.model.getNumberOfGuests()) content += `<option selected="selected">${i}</option>`;
-            else content += `<option>${i}</option>`;
-        }
-        content += `</select>
+                            <form class="form-row">
+                                <div class="col-12">
+                                    <label for="guests" class="mr-2"    >Guests</label>
+                                    <input type="number" id="guests" class="value-num-guests" value="${this.model.getNumberOfGuests()}">        
                                 </div>
                             </form>
                         </li>

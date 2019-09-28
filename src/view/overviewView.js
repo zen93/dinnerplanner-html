@@ -25,7 +25,7 @@ class OverviewView {
             <div class="row" id="dishDetails"></div>
           </div>
           <div class="col-12 col-sm-3">
-            <p id="value-total-price"></p>
+            <p class="value-total-price"></p>
           </div>
           <div class="col-12">
             <hr>
@@ -75,7 +75,7 @@ class OverviewView {
       //   `;
       //   dishDetails.innerHTML += content;
       // });
-      let totalPrice = document.getElementById('value-total-price');
+      let totalPrice = document.getElementsByClassName('value-total-price')[0];
       totalPrice.innerHTML = this.model.getTotalMenuPrice();
       this.afterRender();
     }
