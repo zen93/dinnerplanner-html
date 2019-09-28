@@ -2,15 +2,21 @@ class SearchView {
   constructor(container, model) {
       this.container = container;
       this.model = model;
+      model.addObserver(this);
+      this.shown = false;
   }
 
   // An example of creating HTML procedurally. Think about the pros and cons of this approach.
   async render() {
-    let dishes = await this.model.getAllDishes();
+    this.shown = true;
+    let dishes =  await this.model.getFullMenu();
   var content =
         `
         <div class="row"> 
           <div class="col-sm-12"><h1>Dinner Planner</h1></div>
+          <div id="loader" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
           <div id="sideBarView" class="col-12 col-sm-4">
           </div>
           <div class="col-12 col-sm-8" id="dishSearchView">
@@ -50,15 +56,17 @@ class SearchView {
       </div>
     `;
     this.container.innerHTML = content;
-    let confirmView = new ConfirmView(document.getElementById('sideBarView'), this.model);
-    confirmView.render();
+    let sidebarView = new SidebarView(document.getElementById('sideBarView'), this.model);
+    sidebarView.render();
     this.afterRender();
   }
 
   afterRender() {
+    document.getElementById('loader').style.display = 'none';
   }
-
-  update(payload) {
+  
+  update(model, changeDetails) {
     // TODO lab3
+    //if(this.shown && changeDetails.numOfGuests) 
   }
 }

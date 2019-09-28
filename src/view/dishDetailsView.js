@@ -46,7 +46,7 @@ class DishDetailsView {
       `;
       this.container.innerHTML = content;
       document.getElementById('addToMenu').onclick = () => { this.model.addDishToMenu(dish.id)};
-      let confirmView = new ConfirmView(document.getElementById('sideBarView'), this.model);
+      let confirmView = new SidebarView(document.getElementById('sideBarView'), this.model);
       confirmView.render();
       this.afterRender();
     }

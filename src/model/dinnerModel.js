@@ -1,7 +1,8 @@
 //DinnerModel class
-class DinnerModel {
+class DinnerModel extends Observable {
 
   constructor() {
+    super();
     this.dishes = dishesConst;
 
     //TODO Lab 0
@@ -10,6 +11,7 @@ class DinnerModel {
     this.guests = 0;
     this.menu = [];
     this.currentDish = 0;
+    this.changeDetails = {};
   }
   
   handleHTTPError(response) {
@@ -26,6 +28,8 @@ class DinnerModel {
   setNumberOfGuests(num) {
     //TODO Lab 0
     if(num <= 10 && num >= 0) this.guests = num;
+    this.changeDetails.numOfGuests = this.guests;
+    this.notifyObservers(this.changeDetails);
   }
 
   getNumberOfGuests() {

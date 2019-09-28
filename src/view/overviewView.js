@@ -10,6 +10,9 @@ class OverviewView {
       
         <div class="row"> 
           <div class="col-sm-12"><h1>Dinner Planner</h1></div>
+          <div id="loader" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
           <div class="col-12 col-sm-4">
             <p>My Dinner: <span class="value-num-guests">${this.model.getNumberOfGuests()}</span> people </p>
           </div>
@@ -25,7 +28,7 @@ class OverviewView {
             <div class="row" id="dishDetails"></div>
           </div>
           <div class="col-12 col-sm-3">
-            <p id="value-total-price"></p>
+            <p class="value-total-price"></p>
           </div>
           <div class="col-12">
             <hr>
@@ -75,12 +78,14 @@ class OverviewView {
       //   `;
       //   dishDetails.innerHTML += content;
       // });
-      let totalPrice = document.getElementById('value-total-price');
+      let totalPrice = document.getElementsByClassName('value-total-price')[0];
       totalPrice.innerHTML = this.model.getTotalMenuPrice();
       this.afterRender();
     }
 
     afterRender() {
+      let loader = document.getElementById('loader');
+      loader.style.display = 'none';
     }
 
     update(payload) {
