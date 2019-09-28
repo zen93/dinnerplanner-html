@@ -60,6 +60,7 @@ class DinnerModel {
   getTotalMenuPrice() {
     //TODO Lab 0
     var total;
+    if(this.menu.length == 0) return 0.0;
     total = this.menu.map((dish) => dish.pricePerServing).reduce((a, b) => a + b);
     total *= this.guests;
     return total;
@@ -78,7 +79,6 @@ class DinnerModel {
       resolve();
     })
     .catch(console.error);
-    console.log(this.menu);
     })
     
   }

@@ -11,7 +11,7 @@ class DishDetailsView {
           `
           <div class="row"> 
             <div class="col-sm-12"><h1>Dinner Planner</h1></div>
-            <div id="dishSidebar" class="col-12 col-sm-4">
+            <div id="sideBarView" class="col-12 col-sm-4">
             </div>
             <div class="col-12 col-sm-4">
                 <h2>${dish.title}</h2>
@@ -46,7 +46,7 @@ class DishDetailsView {
       `;
       this.container.innerHTML = content;
       document.getElementById('addToMenu').onclick = () => { this.model.addDishToMenu(dish.id)};
-      let confirmView = new ConfirmView(document.getElementById('dishSidebar'), this.model);
+      let confirmView = new ConfirmView(document.getElementById('sideBarView'), this.model);
       confirmView.render();
       this.afterRender();
     }

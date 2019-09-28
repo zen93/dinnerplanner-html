@@ -48,7 +48,7 @@
         model.setNumberOfGuests(2);
         model.setCurrentDish(592479);
         await model.addDishToMenu(547775);
-        let view = new SelectDishView(document.getElementsByClassName('page-content')[0], model);
+        let view = new SearchView(document.getElementsByClassName('page-content')[0], model);
         view.render();
     }
     window.onload = render();

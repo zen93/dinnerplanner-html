@@ -11,7 +11,7 @@ class OverviewView {
         <div class="row"> 
           <div class="col-sm-12"><h1>Dinner Planner</h1></div>
           <div class="col-12 col-sm-4">
-            <p>My Dinner: <span id="value-num-guests">${this.model.getNumberOfGuests()}</span> people </p>
+            <p>My Dinner: <span class="value-num-guests">${this.model.getNumberOfGuests()}</span> people </p>
           </div>
           <div class="col-12 col-sm-8">
             <button type="button" class="btn btn-success float-sm-right">Go back and edit dinner</button>
@@ -59,7 +59,7 @@ class OverviewView {
         let content = `
           <div class="col-12 col-sm-3">
             <img class="img-fluid" src="${menu[i].image}" >
-            <p>${menu[i].title}</p>
+            <p class="value-main-course-name">${menu[i].title}</p>
             <p>${menu[i].pricePerServing} SEK</p>
           </div>
         `;

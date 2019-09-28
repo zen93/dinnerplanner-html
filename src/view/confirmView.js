@@ -8,7 +8,7 @@ class ConfirmView {
     render() {
         var content = `
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <span class="navbar-brand" href="#">My Dinner <span class="visible-xs">${this.model.getTotalMenuPrice()} SEK</span></span>
+                <span class="navbar-brand" href="#">My Dinner <span class="d-block d-sm-none">${this.model.getTotalMenuPrice()} SEK</span></span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#confirmForm" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -45,7 +45,7 @@ class ConfirmView {
             );
                 
             content += `
-                            <tr><td>Total</td> <td>${this.model.getTotalMenuPrice()} SEK</tr>
+                            <tr><td>Total</td> <td><span class="value-total-price">${this.model.getTotalMenuPrice()}</span> SEK</tr>
                             <tr><td colspan="2"><a href="#" class="btn btn-primary">Confirm Dinner</a></td></tr>
                         </tbody>
                     </table>
