@@ -7,46 +7,87 @@ class DinnerModel {
     //TODO Lab 0
     // implement the data structure that will hold number of guests
     // and selected dishes for the dinner menu
-
+    this.guests = 0;
+    this.menu = [];
+    this.currentDish = 0;
   }
-
+  
+  handleHTTPError(response) {
+    if(response.ok)
+       return response;
+    if(response.status == 404)
+      return response;
+    throw Error(response.statusText);
+  }
+  
+  removeLoadingIcon() {
+    document.getElementById("loader").style.display = 'none';
+  }
   setNumberOfGuests(num) {
     //TODO Lab 0
+    if(num <= 10 && num >= 0) this.guests = num;
   }
 
   getNumberOfGuests() {
     //TODO Lab 0
+    return this.guests;
   }
-
+  setCurrentDish(id) {
+    this.currentDish = id;
+  }
+  getCurrentDish() {
+    return this.currentDish;
+  }
   //Returns the dish that is on the menu for selected type 
   getSelectedDish(type) {
     //TODO Lab 0
+    return this.menu.filter((dish) => dish.type == type);
   }
 
   //Returns all the dishes on the menu.
   getFullMenu() {
     //TODO Lab 0
+    return this.menu;
   }
 
   //Returns all ingredients for all the dishes on the menu.
   getAllIngredients() {
     //TODO Lab 0
+    return this.menu.map((dish) => dish.ingredients);
   }
 
   //Returns the total price of the menu (all the ingredients multiplied by number of guests).
   getTotalMenuPrice() {
     //TODO Lab 0
+    var total;
+    if(this.menu.length == 0) return 0.0;
+    total = this.menu.map((dish) => dish.pricePerServing).reduce((a, b) => a + b);
+    total *= this.guests;
+    return total;
   }
 
   //Adds the passed dish to the menu. If the dish of that type already exists on the menu
   //it is removed from the menu and the new one added.
   addDishToMenu(id) {
     //TODO Lab 0 
+    return new Promise(resolve => {
+      fetch(host + "/recipes/" + id + "/information", {headers: { 'X-Mashape-Key': key }})
+      .then(this.handleHTTPError)
+      .then(response => response.json())
+      .then(data => {
+      this.menu.push(data);
+      resolve();
+    })
+    .catch(console.error);
+    })
+    
   }
 
   //Removes dish from menu
   removeDishFromMenu(id) {
     //TODO Lab 0
+    this.menu = this.menu.filter(dish => dish.id != id);
+    this.removeLoadingIcon();
   }
 
 
@@ -54,31 +95,38 @@ class DinnerModel {
   //query argument, text, if passed only returns dishes that contain the query in name or one of the ingredients.
   //if you don't pass any query, all the dishes will be returned
   getAllDishes(type, query) {
-    return this.dishes.filter(function (dish) {
-      let found = true;
-      if (query) {
-        found = false;
-        dish.ingredients.forEach(function (ingredient) {
-          if (ingredient.name.indexOf(query) !== -1) {
-            found = true;
-          }
+    if(!type && !query) {
+      return fetch(host + '/recipes/search', {headers: { 'X-Mashape-Key': key }})
+      .then(this.handleHTTPError)
+      .then(response => response.json())
+      .then(data => {
+        let baseUri = data.baseUri;
+        data = data.results;
+        data.forEach((dish) => {
+          dish.image = baseUri + dish.imageUrls[0];
         });
-        if (dish.name.indexOf(query) !== -1) {
-          found = true;
-        }
+        return data;
+      })
+      .catch(console.error);
+
+    } 
+    else {
+      if(type && query) {
+        return fetch(host + '/recipes/search?type=' + type + '&query=' + query, {headers: { 'X-Mashape-Key': key }})
+        .then(this.handleHTTPError)
+        .then(response => response.json())
+        .then(data => data.results)
+        .catch(console.error);
       }
-      return dish.type === type && found;
-    });
+    }
   }
 
   //Returns a dish of specific ID
   getDish(id) {
-    for (let dsh of this.dishes) {
-      if (dsh.id === id) {
-        return dsh;
-      }
-    }
-    return undefined;
+    return fetch(host + "/recipes/" + id + "/information", {headers: { 'X-Mashape-Key': key }})
+    .then(this.handleHTTPError)
+    .then(response => response.json())
+    .catch(console.error);
   }
 }
 

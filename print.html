@@ -36,9 +36,25 @@
 <script src="src/config.js"></script>
 <script src="src/model/dinnerModel.js"></script>
 <script src="src/view/overviewView.js"></script>
+<script src="src/view/dishDetailsView.js"></script>
+<script src="src/view/confirmView.js"></script>
+<script src="src/view/selectDishView.js"></script>
+<script src="src/view/printView.js"></script>
 <script src="src/view/homeView.js"></script>
 <script src="src/view/searchView.js"></script>
 <script src="src/app.js"></script>
+<script type="text/javascript">
+    async function render() {
+        let model = new DinnerModel();
+        model.setNumberOfGuests(2);
+        model.setCurrentDish(592479);
+        await model.addDishToMenu(547775);
+        await model.addDishToMenu(592479);       
+        let view = new PrintView(document.getElementsByClassName('page-content')[0], model);
+        view.render();
+    }
+    window.onload = render();
+</script>
 
 </body>
 </html>
