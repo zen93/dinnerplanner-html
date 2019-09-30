@@ -3,6 +3,9 @@ class OverviewView {
         this.container = container;
         this.model = model;
     }
+    removeObserver() {
+      this.model.removeObserver(this);
+  }
 
     // An example of creating HTML procedurally. Think about the pros and cons of this approach.
     render() {
@@ -17,7 +20,7 @@ class OverviewView {
             <p>My Dinner: <span class="value-num-guests">${this.model.getNumberOfGuests()}</span> people </p>
           </div>
           <div class="col-12 col-sm-8">
-            <button type="button" class="btn btn-success float-sm-right">Go back and edit dinner</button>
+            <a href="#search" class="btn btn-success float-sm-right">Go back and edit dinner</a>
           </div>
         </div>
         <div class="row">
@@ -34,7 +37,7 @@ class OverviewView {
             <hr>
           </div>
           <div class="col-12 text-center">
-            <button type="button" id="toPrintBtn" class="btn btn-warning">Print Recipe</button>
+            <a href="#print" id="toPrintBtn" class="btn btn-warning">Print Recipe</a>
           </div>
         </div>
       `;
@@ -78,9 +81,17 @@ class OverviewView {
       //   `;
       //   dishDetails.innerHTML += content;
       // });
-      let totalPrice = document.getElementsByClassName('value-total-price')[0];
+      let totalPrice = this.container.getElementsByClassName('value-total-price')[0];
       totalPrice.innerHTML = this.model.getTotalMenuPrice();
       this.afterRender();
+    }
+
+    showView() {
+      this.container.style.display = 'block';
+    }
+  
+    hideView() {
+        this.container.style.display = 'none';
     }
 
     afterRender() {

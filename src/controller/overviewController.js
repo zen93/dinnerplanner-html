@@ -1,28 +1,35 @@
-class SidebarController {
+class OverviewController {
     constructor(view, model) {
         this.view = view;
         this.model = model;
+
         // TODO lab 3
-        this.hash = "";
+        this.hash = "#overview";
     }
+    
+    updateHash() {
+        window.location.hash = this.hash;
+    }
+    
     addListeners() {
-        let model = this.model;
-        this.changeGuestsAction = function (event) {
-            model.setNumberOfGuests(event.target.value);
-        }
-        this.view.guestsInput.addEventListener("input", this.changeGuestsAction);
-        
+        //this.view.backToSearchBtn.addEventListener("click", this.printAction)
     }
+    
     removeListeners() {
-        if(this.view.guestsInput)
-            this.view.guestsInput.removeEventListener("input", this.changeGuestsAction);
+        // if(this.view.backToSearchBtn)
+        //     this.view.backToSearchBtn.removeEventListener("click", this.printAction);
+    }
+    printAction() {
+        window.location.hash = '#print';
     }
     async renderView() {
         // TODO lab 3
+        if(location.hash != this.hash) this.updateHash();
         this.model.addObserver(this.view);
         this.view.showView();
         await this.view.render();
         this.addListeners();
+        
     }
 
     // TODO Lab 3

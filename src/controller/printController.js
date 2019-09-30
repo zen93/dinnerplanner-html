@@ -1,21 +1,13 @@
-class SidebarController {
+class PrintController {
     constructor(view, model) {
         this.view = view;
         this.model = model;
         // TODO lab 3
-        this.hash = "";
+        this.hash = "#print";
     }
-    addListeners() {
-        let model = this.model;
-        this.changeGuestsAction = function (event) {
-            model.setNumberOfGuests(event.target.value);
-        }
-        this.view.guestsInput.addEventListener("input", this.changeGuestsAction);
-        
+    addListeners() {        
     }
     removeListeners() {
-        if(this.view.guestsInput)
-            this.view.guestsInput.removeEventListener("input", this.changeGuestsAction);
     }
     async renderView() {
         // TODO lab 3

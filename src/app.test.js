@@ -36,6 +36,7 @@ describe("DinnerPlanner App", () => {
     beforeEach(async () => {
       await model.addDishToMenu(559251);
       await searchView.render();
+      await sidebarView.render();
     });
 
     it("has a sidebar", () => {
@@ -72,7 +73,7 @@ describe("DinnerPlanner App", () => {
         expect(valueHolders.length).to.be.above(0);
         for (let v of valueHolders) {
           expect(v).to.not.be.a("null");
-          expect(v.innerHTML).to.equal(""+model.getNumberOfGuests());
+          expect(v.value).to.equal(""+model.getNumberOfGuests());
         }
 
     });
@@ -98,6 +99,7 @@ describe("DinnerPlanner App", () => {
 
   describe("Confirmation page", () => {
     beforeEach(async () => {
+      sidebarView.removeObserver();
       await model.addDishToMenu(559251);
       model.setNumberOfGuests(1);
       await overviewView.render();
@@ -144,29 +146,26 @@ describe("DinnerPlanner App", () => {
   });
 
   describe("Sidebar view", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       model = new DinnerModel();
+      model.setNumberOfGuests(1);
       sidebarView = new SidebarView(document.getElementById("page-content"), model);
       sidebarController = new SidebarController(sidebarView, model);
-      sidebarController.renderView();
+      await sidebarController.renderView();
     });
 
     it("Has a number of guests input", () => {
-      setTimeout(() => {
         const input = document.getElementsByClassName("input-num-guests")[0];
         expect(input).to.not.be.a("null");
         expect(input.tagName).to.equal("INPUT");
         expect(input.value).to.equal("1");
-      },10000);
     });
 
     it("Controller modifies the model", () => {
-      setTimeout(() => {
         const input = document.getElementsByClassName("input-num-guests")[0];
         input.value = 5;
         input.dispatchEvent(new Event("input"));
         expect(""+model.getNumberOfGuests()).to.equal("5");
-      }, 10000);
     });
 
     it("Observer updates the view", () => {

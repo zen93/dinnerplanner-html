@@ -14,10 +14,18 @@
 </head>
 <body>
 <div class="container page-content">
-    <h1>Dinner planner</h1>
-    <div id="loader" class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+    <div class="header d-flex align-items-center justify-content-center">
+        <h1><a href="#home">Dinner Planner</a></h1>
     </div>
+    <div class="row">
+        <div id="sideBarView"></div>
+        <div id="overviewView"></div>
+        <div id="dishDetailsView"></div>
+        <div id="homeView"></div>
+        <div id="printView"></div>
+        <div id="searchView"></div>
+    </div>
+    
 </div>
 
 <!-- Bootstrap JavaScript, needed if you want for instance tabs, models, popovers etc. -->
@@ -39,6 +47,15 @@
 <script src="src/view/overviewView.js"></script>
 <script src="src/view/homeView.js"></script>
 <script src="src/view/searchView.js"></script>
+<script src="src/view/sidebarView.js"></script>
+<script src="src/view/dishDetailsView.js"></script>
+<script src="src/view/printView.js"></script>
+<script src="src/controller/homeController.js"></script>
+<script src="src/controller/searchController.js"></script>
+<script src="src/controller/sidebarController.js"></script>
+<script src="src/controller/dishDetailsController.js"></script>
+<script src="src/controller/overviewController.js"></script>
+<script src="src/controller/printController.js"></script>
 <script src="src/app.js"></script>
 
 </body>

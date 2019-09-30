@@ -3,6 +3,9 @@ class PrintView {
         this.container = container;
         this.model = model;
     }
+    removeObserver() {
+      this.model.removeObserver(this);
+    }
 
     // An example of creating HTML procedurally. Think about the pros and cons of this approach.
     render() {
@@ -14,7 +17,7 @@ class PrintView {
             <p>My Dinner: <span id="value-num-guests">${this.model.getNumberOfGuests()}</span> people </p>
           </div>
           <div class="col-12 col-sm-8">
-            <button type="button" class="btn btn-success float-sm-right">Go back and edit dinner</button>
+            <a href="#search" class="btn btn-success float-sm-right">Go back and edit dinner</a>
           </div>
         </div>
         <div class="row">
@@ -22,13 +25,13 @@ class PrintView {
             <hr>
           </div>
           <div class="col-12">
-            <div class="row" id="dishDetails"></div>
+            <div class="row" id="dishDetailsPrint"></div>
           </div>
         </div>
       `;
       this.container.innerHTML = content;
      
-      let dishDetails = document.getElementById('dishDetails');
+      let dishDetails = document.getElementById('dishDetailsPrint');
       let menu = this.model.getFullMenu();
       for(let i = 0;i < menu.length; i++) {
         let content = `
@@ -50,5 +53,17 @@ class PrintView {
     }
 
     afterRender() {
+    }
+    showView() {
+      this.container.style.display = 'block';
+    }
+  
+    hideView() {
+        this.container.style.display = 'none';
+    }
+    update(model, changeDetails) {
+      if(changeDetails.numOfGuests) {
+        document.getElementById('value-num-guests').value = changeDetails.numOfGuests;
+      }
     }
 }

@@ -4,7 +4,8 @@ class Observable{
    }
 
     addObserver(observer){
-	   this._observers.push(observer);
+          if(this._observers.filter((ob) => ob == observer).length == 1) return;
+	    this._observers.push(observer);
     }
    
     notifyObservers(changeDetails) {

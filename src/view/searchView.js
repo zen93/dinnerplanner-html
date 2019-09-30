@@ -3,31 +3,36 @@ class SearchView {
       this.container = container;
       this.model = model;
       model.addObserver(this);
-      this.shown = false;
+      this.searchBtn = null;
+      this.dishTitles = [];
+      this.keywords = null;
+      this.dishType = null;
   }
-
+  removeObserver() {
+    this.model.removeObserver(this);
+  }
   // An example of creating HTML procedurally. Think about the pros and cons of this approach.
   async render() {
-    this.shown = true;
-    let dishes =  await this.model.getFullMenu();
+    this.container.className = "col-12 col-sm-8";
+    
+    //let model = this.model;
   var content =
         `
-        <div class="row"> 
-          <div class="col-sm-12"><h1>Dinner Planner</h1></div>
+        
           <div id="loader" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
-          <div id="sideBarView" class="col-12 col-sm-4">
-          </div>
-          <div class="col-12 col-sm-8" id="dishSearchView">
+          <div id="sideBarView" class="col-12 col-sm-4"></div>
+          <div class="col-12" id="dishSearchView">
               <h2>Find a dish</h2>
               <form>
                   <div class="form-row">
                       <div class="col-12 col-sm-5">
-                          <input class="form-control" type="text" placeholder="Enter keyworkds">
+                          <input class="form-control keywordInput" type="text" placeholder="Enter keywords">
                       </div>
                       <div class="col-12 col-sm-4"> 
-                          <select class="form-control" id="value-num-guests">
+                          <select class="form-control dishType">
+                              <option>all</option>
                               <option>main course</option>
                               <option>side dish</option>
                               <option>dessert</option>
@@ -41,32 +46,62 @@ class SearchView {
                               <option>drink</option>
                           </select>
                       </div>
-                      <button type="button" class="btn btn-success">search</button>
+                      <button type="button" class="btn btn-success searchBtn">search</button>
                   </div>
               </form>
               <div class="col-12"><hr></div>
-              <div class="row" id="dishItems">`
-      dishes.forEach((dish) => {
-          content += `<div class="col-12 col-sm-3"><p class="value-main-course-name">${dish.title}</p>
-          <img style="margin-bottom:10px;" src="${dish.image}" class="img-fluid"></div>`;
-      })
+              <div class="row dishItems" id="dishItems">`
+      // dishes.forEach((dish) => {
+      //     content += `<div class="col-12 col-sm-3" id=${dish.id}><p><a class="dishTitle" href="#dishDetails" id="${dish.id}">${dish.title}</a></p>
+      //     <img style="margin-bottom:10px;" src="${dish.image}" class="img-fluid"></div>`;
+      // })
       content += `</div>
           </div>
           </div>
-      </div>
+     
     `;
+    
     this.container.innerHTML = content;
-    let sidebarView = new SidebarView(document.getElementById('sideBarView'), this.model);
-    sidebarView.render();
+    //let sidebarView = new SidebarView(document.getElementById('sideBarView'), this.model);
+    //sidebarView.render();
+    let dishes =  await this.model.getAllDishes();
     this.afterRender();
   }
 
   afterRender() {
     document.getElementById('loader').style.display = 'none';
+    this.searchBtn = this.container.getElementsByClassName("searchBtn")[0];
+    this.keywords = this.container.getElementsByClassName("keywordInput")[0];
+    this.dishType = this.container.getElementsByClassName("dishType")[0];
+    let dishTitles = this.container.getElementsByClassName('dishTitle');
+    for(let i = 0; i < dishTitles.length; i++) {
+      this.dishTitles.push(dishTitles[i]);
+    }
   }
   
+  showView() {
+    this.container.style.display = 'block';
+  }
+
+  hideView() {
+    this.container.style.display = 'none';
+  }
+
   update(model, changeDetails) {
     // TODO lab3
-    //if(this.shown && changeDetails.numOfGuests) 
+    if(changeDetails.dishes) {
+      if(changeDetails.dishes.length > 0) {
+        let dishItems = this.container.getElementsByClassName('dishItems')[0];
+        dishItems.innerHTML = "";
+        changeDetails.dishes.forEach((dish) => {
+          dishItems.innerHTML += `<div class="col-12 col-sm-3" id=${dish.id}><p><a class="dishTitle" href="#dishDetails" id="${dish.id}">${dish.title}</a></p>
+          <img style="margin-bottom:10px;" src="${dish.image}" class="img-fluid"></div>`;
+        });
+        let dishTitles = this.container.getElementsByClassName('dishTitle');
+        for(let i = 0; i < dishTitles.length; i++) {
+          this.dishTitles.push(dishTitles[i]);
+        }
+      }
+    }
   }
 }

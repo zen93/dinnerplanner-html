@@ -2,14 +2,19 @@ class SidebarView  {
   constructor(container, model) {
       this.container = container;
       this.model = model;
-      model.addObserver(this);
+      this.confirmBtn = null;
+      this.guestsInput = null;
       this.shown = false;
+      model.addObserver(this);
   }
-
+  removeObserver() {
+    this.model.removeObserver(this);
+  }
   // An example of creating HTML procedurally. Think about the pros and cons of this approach.
   render() {
-      this.shown = true;
+    this.shown = true;
       var content = `
+        
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
               <span class="navbar-brand" href="#">My Dinner <span class="d-block d-sm-none">${this.model.getTotalMenuPrice()} SEK</span></span>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#confirmForm" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,37 +41,60 @@ class SidebarView  {
                                       <th>Cost</th>
                                   </tr>
                               </thead>
-                              <tbody>`;
+                              <tbody class="table-body"><span>`;
     
           this.model.getFullMenu().forEach(
               (dish) => {
-                  content += `<tr><td>${dish.title}</td><td>${dish.pricePerServing}</td></tr>`
+                  content += `<tr><td class="value-main-course-name">${dish.title}</td><td>${dish.pricePerServing}</td></tr>`
               }
           );
               
-          content += `
+          content += `    </span>
                           <tr><td>Total</td> <td><span class="value-total-price">${this.model.getTotalMenuPrice()}</span> SEK</tr>
-                          <tr><td colspan="2"><a href="#" class="btn btn-primary">Confirm Dinner</a></td></tr>
+                          <tr><td colspan="2"><a href="#overview" class="btn btn-primary confirmBtn">Confirm Dinner</a></td></tr>
                       </tbody>
                   </table>
               </li>
           </div>
           </nav>
         `;
-    
+    if(document.getElementById('sideBarView'))
+      this.container = document.getElementById('sideBarView');
+    this.container.className = "col-12 col-sm-4";
     this.container.innerHTML = content;
     this.afterRender();
   }
 
   afterRender() {
-    this.startBtn = this.container.getElementsByClassName("value-num-guests");
+    this.confirmBtn = this.container.getElementsByClassName("confirmBtn")[0];
+    this.guestsInput = this.container.getElementsByClassName("input-num-guests")[0];
+  }
+  
+  showView() {
+    this.container.style.display = 'block';
   }
 
+  hideView() {
+    this.container.style.display = 'none';
+  }
+  
   update(model, changeDetails) {
     // TODO Lab3
-    if(changeDetails.numOfGuests && this.shown) {
-      this.container.getElementsByClassName('input-num-guests')[0].value = changeDetails.numOfGuests;
-      this.container.getElementsByClassName('value-total-price')[0].innerHTML = model.getTotalMenuPrice();
-    }
+    if(changeDetails.dish && this.shown) {
+      let table = this.container.getElementsByClassName('table-body')[0];
+      table.innerHTML = "";
+      model.getFullMenu().forEach(
+        (dish) => {
+            table.innerHTML += `<tr><td class="value-main-course-name">${dish.title}</td><td>${dish.pricePerServing}</td></tr>`
+        });
+        table.innerHTML += `<tr><td>Total</td> <td><span class="value-total-price">${model.getTotalMenuPrice()}</span> SEK</tr>
+        <tr><td colspan="2"><a href="#overview" class="btn btn-primary confirmBtn">Confirm Dinner</a></td></tr>`;
+        this.container.getElementsByClassName('value-total-price')[0].innerHTML = model.getTotalMenuPrice();
+      } 
+      if(changeDetails.numOfGuests) {
+        this.container.getElementsByClassName('input-num-guests')[0].value = changeDetails.numOfGuests;
+        this.container.getElementsByClassName('value-total-price')[0].innerHTML = model.getTotalMenuPrice();
+      }
   }
+
 }

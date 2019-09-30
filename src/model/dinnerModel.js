@@ -10,7 +10,8 @@ class DinnerModel extends Observable {
     // and selected dishes for the dinner menu
     this.guests = 0;
     this.menu = [];
-    this.currentDish = 0;
+    this.currentDish = 592479;
+    this.searchedDishes = [];
     this.changeDetails = {};
   }
   
@@ -80,6 +81,8 @@ class DinnerModel extends Observable {
       .then(response => response.json())
       .then(data => {
       this.menu.push(data);
+      this.changeDetails.dish = data;
+      this.notifyObservers(this.changeDetails);
       resolve();
     })
     .catch(console.error);
@@ -109,17 +112,44 @@ class DinnerModel extends Observable {
         data.forEach((dish) => {
           dish.image = baseUri + dish.imageUrls[0];
         });
+        this.changeDetails.dishes = data;
+        this.notifyObservers(this.changeDetails);
         return data;
       })
       .catch(console.error);
 
     } 
     else {
+      if(!type && query) {
+        return fetch(host + '/recipes/search?query=' + query, {headers: { 'X-Mashape-Key': key }})
+        .then(this.handleHTTPError)
+        .then(response => response.json())
+        .then(data => {
+          let baseUri = data.baseUri;
+          data = data.results;
+          data.forEach((dish) => {
+            dish.image = baseUri + dish.imageUrls[0];
+          });
+          this.changeDetails.dishes = data;
+          this.notifyObservers(this.changeDetails);
+          return data;
+        })
+        .catch(console.error);
+      }
       if(type && query) {
         return fetch(host + '/recipes/search?type=' + type + '&query=' + query, {headers: { 'X-Mashape-Key': key }})
         .then(this.handleHTTPError)
         .then(response => response.json())
-        .then(data => data.results)
+        .then(data => {
+          let baseUri = data.baseUri;
+          data = data.results;
+          data.forEach((dish) => {
+            dish.image = baseUri + dish.imageUrls[0];
+          });
+          this.changeDetails.dishes = data;
+          this.notifyObservers(this.changeDetails);
+          return data;
+        })
         .catch(console.error);
       }
     }
