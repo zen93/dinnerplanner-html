@@ -11,7 +11,6 @@ class DinnerModel extends Observable {
     this.guests = 0;
     this.menu = [];
     this.currentDish = 592479;
-    this.searchedDishes = [];
     this.changeDetails = {};
   }
   

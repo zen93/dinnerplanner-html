@@ -19,7 +19,7 @@ class DishDetailsView {
     var content =
         `     <div class="row">
                 <div class="col-12 col-sm-6">
-                    <h2>${dish.title}</h2>
+                    <h2 id="ddTitle">${dish.title}</h2>
                     <img style="margin-bottom:10px;" src="${dish.image}" class="img-fluid"> 
                     <button type="button" class="btn btn-success backToSearchBtn">Back to search</button>
                     <h2>Preparation</h2>
@@ -29,7 +29,7 @@ class DishDetailsView {
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col" colspan="2">Ingredients for ${this.model.getNumberOfGuests()} people</th>
+                            <th scope="col" colspan="2">Ingredients for <span id="ddNoOfGuests">${this.model.getNumberOfGuests()}</span> people</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -42,7 +42,7 @@ class DishDetailsView {
         content += `
                         <tr>
                             <td><a href="#dishDetails" id=${dish.id} class="btn btn-primary addToMenu">Add to Menu</a>
-                            <td>${dish.pricePerServing} SEK</td>
+                            <td><span id="ddTotalPrice">${dish.pricePerServing}</span> SEK</td>
                         </tr>
                     </tbody>
                 </table>
@@ -51,9 +51,6 @@ class DishDetailsView {
       `;
       
       this.container.innerHTML = content;
-      //document.getElementById('addToMenu').onclick = () => { this.model.addDishToMenu(dish.id)};
-      //let sidebarView = new SidebarView(document.getElementById('sideBarView'), this.model);
-      //sidebarView.render();
       this.afterRender();
     }
 

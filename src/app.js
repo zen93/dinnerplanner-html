@@ -18,14 +18,38 @@ class GeneralStateController {
           hide.forEach((controller) => controller.hideView());
           await controllers[1].renderView();
           await controllers[0].renderView();
+          this.store();
           break;
         default:
           let hide1 = this.controllers.filter(controller => controller.hash != controllers[0].hash);
           hide1.forEach((controller) => controller.hideView());
-          controllers[0].renderView();
+          await controllers[0].renderView();
+          this.store();
           break;
       }
       
+    }
+  }
+
+  getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
+  store(days = 1) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = date.toGMTString();
+    document.cookie = `guests=${this.model.guests}; menu=${JSON.stringify(this.model.menu)}; currentDish=${this.currentDish}; hash=${window.location.hash}; expires=${expires}; path=/`;
+  }
+
+  read() {
+    if(document.cookie) {
+      this.model.guests = parseInt(this.getCookie("guests"), 10);
+      this.model.currentDish = this.getCookie("currentDish");
+      this.model.menu = JSON.parse(this.getCookie("menu"));
+      window.location.hash = this.getCookie("hash");
     }
   }
   async initialize() {
@@ -71,6 +95,7 @@ window.onload = async function () {
 
   generalStateController = new GeneralStateController(model);
   generalStateController.initialize();
+  generalStateController.read();
   // const container = document.getElementById("homeView");
   // const view = new HomeView(container, model);
   // view.render();

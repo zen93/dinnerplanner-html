@@ -32,6 +32,7 @@ describe("DinnerPlanner App", () => {
     });
   });
 
+  
   describe("Search view", () => {
     beforeEach(async () => {
       await model.addDishToMenu(559251);
@@ -96,6 +97,9 @@ describe("DinnerPlanner App", () => {
         }      
     });
   });
+
+  
+
 
   describe("Confirmation page", () => {
     beforeEach(async () => {
@@ -172,6 +176,35 @@ describe("DinnerPlanner App", () => {
       model.setNumberOfGuests(6);
       const input = document.getElementsByClassName("input-num-guests")[0];
       expect(""+input.value).to.equal("6");
+    });
+  });
+
+  describe("DishDetails view", () => {
+    beforeEach(async () => {
+      model = new DinnerModel();
+      model.setCurrentDish(559251);
+      let dishDetailsView = new DishDetailsView(document.getElementById("page-content"), model);
+      let dishDetailsController = new DishDetailsController(dishDetailsView, model);
+      await dishDetailsController.renderView();
+    });
+    
+    it("has number of guests", () => {
+      const v = document.getElementById('ddNoOfGuests');
+      expect(v).to.not.be.a("null");
+      expect(v.innerHTML).to.equal(""+model.getNumberOfGuests());
+    });
+
+    it("has dish serving price", () => {
+      const v = document.getElementById('ddTotalPrice');
+      expect(v).to.not.be.a("null");
+      expect(v.innerHTML).to.equal(""+195.59);
+    });
+
+    it("Controller modifies the model", () => {
+      const menuBtn = document.getElementsByClassName("addToMenu")[0];
+      menuBtn.dispatchEvent(new Event("click"));
+      const title = document.getElementById('ddTitle');
+      expect(title.innerHTML).to.equal("Breakfast Pizza");
     });
   });
 });
