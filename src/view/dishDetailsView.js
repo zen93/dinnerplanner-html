@@ -42,7 +42,7 @@ class DishDetailsView {
         content += `
                         <tr>
                             <td><a href="#dishDetails" id=${dish.id} class="btn btn-primary addToMenu">Add to Menu</a>
-                            <td><span id="ddTotalPrice">${dish.pricePerServing}</span> SEK</td>
+                            <td><span id="ddTotalPrice">${dish.pricePerServing}</span> SEK (per serving)</td>
                         </tr>
                     </tbody>
                 </table>

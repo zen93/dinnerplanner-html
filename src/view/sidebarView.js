@@ -4,6 +4,7 @@ class SidebarView  {
       this.model = model;
       this.confirmBtn = null;
       this.guestsInput = null;
+      this.resetBtn = null;
       this.shown = false;
       model.addObserver(this);
   }
@@ -51,7 +52,8 @@ class SidebarView  {
               
           content += `    </span>
                           <tr><td>Total</td> <td><span class="value-total-price">${this.model.getTotalMenuPrice()}</span> SEK</tr>
-                          <tr><td colspan="2"><a href="#overview" class="btn btn-primary confirmBtn">Confirm Dinner</a></td></tr>
+                          <tr><td><a href="#overview" class="btn btn-primary confirmBtn">Confirm Dinner</a></td>
+                          <td><button type="button" class="btn btn-warning resetBtn">Reset Menu</button></td></tr>
                       </tbody>
                   </table>
               </li>
@@ -68,6 +70,7 @@ class SidebarView  {
   afterRender() {
     this.confirmBtn = this.container.getElementsByClassName("confirmBtn")[0];
     this.guestsInput = this.container.getElementsByClassName("input-num-guests")[0];
+    this.resetBtn = this.container.getElementsByClassName("resetBtn")[0];
   }
   
   showView() {

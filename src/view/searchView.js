@@ -25,7 +25,7 @@ class SearchView {
           <div id="sideBarView" class="col-12 col-sm-4"></div>
           <div class="col-12" id="dishSearchView">
               <h2>Find a dish</h2>
-              <form>
+              
                   <div class="form-row">
                       <div class="col-12 col-sm-5">
                           <input class="form-control keywordInput" type="text" placeholder="Enter keywords">
@@ -48,7 +48,6 @@ class SearchView {
                       </div>
                       <button type="button" class="btn btn-success searchBtn">search</button>
                   </div>
-              </form>
               <div class="col-12"><hr></div>
               <div class="row dishItems" id="dishItems">`
       // dishes.forEach((dish) => {

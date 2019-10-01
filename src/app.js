@@ -2,8 +2,12 @@ class GeneralStateController {
   constructor(model) {
     this.model = model;
     this.controllers = [];
+    model.addObserver(this);
   }
 
+  update(model, changeDetails) {
+    this.store();
+  }
   addController(controller) {
     this.controllers.push(controller);
   }
@@ -31,25 +35,26 @@ class GeneralStateController {
     }
   }
 
-  getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
+  store() {
+    let storage = window.localStorage;
+    storage.setItem('guests', this.model.guests);
+    storage.setItem('menu', JSON.stringify(this.model.menu));
+    storage.setItem('currentDish', this.model.currentDish);
+    storage.setItem('hash', window.location.hash);
   }
-
-  store(days = 1) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    let expires = date.toGMTString();
-    document.cookie = `guests=${this.model.guests}; menu=${JSON.stringify(this.model.menu)}; currentDish=${this.currentDish}; hash=${window.location.hash}; expires=${expires}; path=/`;
-  }
-
   read() {
-    if(document.cookie) {
-      this.model.guests = parseInt(this.getCookie("guests"), 10);
-      this.model.currentDish = this.getCookie("currentDish");
-      this.model.menu = JSON.parse(this.getCookie("menu"));
-      window.location.hash = this.getCookie("hash");
+    let storage = window.localStorage;
+    if(storage.getItem('guests') !== null) {
+      this.model.guests = parseInt(storage.getItem('guests'), 10);
+    }
+    if(storage.getItem('menu') !== null) {
+      this.model.menu = JSON.parse(storage.getItem('menu'));
+    }
+    if(storage.getItem('currentDish') !== null) {
+      this.model.currentDish = parseInt(storage.getItem('currentDish'), 10);
+    }
+    if(storage.getItem('hash') !== null) {
+      window.location.hash = storage.getItem('hash');
     }
   }
   async initialize() {

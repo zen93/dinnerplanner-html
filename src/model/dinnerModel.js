@@ -48,6 +48,12 @@ class DinnerModel extends Observable {
     return this.menu.filter((dish) => dish.type == type);
   }
 
+  resetMenu() {
+    this.menu = [];
+    this.changeDetails.dish = this.menu;
+    this.notifyObservers(this.changeDetails);
+  }
+
   //Returns all the dishes on the menu.
   getFullMenu() {
     //TODO Lab 0
@@ -79,10 +85,21 @@ class DinnerModel extends Observable {
       .then(this.handleHTTPError)
       .then(response => response.json())
       .then(data => {
-      this.menu.push(data);
-      this.changeDetails.dish = data;
-      this.notifyObservers(this.changeDetails);
-      resolve();
+        let sameType = false;
+        this.menu.forEach((dish) => {
+          dish.dishTypes.forEach((type) => {
+           
+            data.dishTypes.forEach((dataType) => {
+              if(dataType == type) sameType = true;
+            });
+          });
+        });
+        if(!sameType) {
+          this.menu.push(data);
+          this.changeDetails.dish = data;
+          this.notifyObservers(this.changeDetails);
+        }
+        resolve();
     })
     .catch(console.error);
     })

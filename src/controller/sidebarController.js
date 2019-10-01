@@ -11,11 +11,17 @@ class SidebarController {
             model.setNumberOfGuests(event.target.value);
         }
         this.view.guestsInput.addEventListener("input", this.changeGuestsAction);
-        
+        this.resetMenuAction = function (event) {
+            model.resetMenu();
+        }
+        this.view.resetBtn.addEventListener("click", this.resetMenuAction);
     }
     removeListeners() {
         if(this.view.guestsInput)
             this.view.guestsInput.removeEventListener("input", this.changeGuestsAction);
+        if(this.view.resetBtn)
+            this.view.resetBtn.removeEventListener("click", this.resetMenuAction);
+            
     }
     async renderView() {
         // TODO lab 3
